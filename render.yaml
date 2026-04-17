@@ -9,11 +9,9 @@ services:
       - key: PORT
         value: 8080
       - key: SPRING_DATASOURCE_URL
-        sync: false
-      - key: SPRING_DATASOURCE_USERNAME
-        sync: false
-      - key: SPRING_DATASOURCE_PASSWORD
-        sync: false
+        fromDatabase:
+          name: prepedge-db
+          property: connectionString
       - key: GROQ_API_KEY
         sync: false
       - key: CORS_ALLOWED_ORIGINS
@@ -32,3 +30,7 @@ services:
           type: web
           name: prepedge-api-v3
           property: host
+
+databases:
+  - name: prepedge-db
+    plan: free
