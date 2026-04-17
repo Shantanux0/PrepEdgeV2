@@ -1,0 +1,34 @@
+services:
+  # --- PrepEdge Elite API (Backend) ---
+  - type: web
+    name: prepedge-api-v3
+    runtime: docker
+    dockerContext: .
+    dockerfilePath: Dockerfile
+    envVars:
+      - key: PORT
+        value: 8080
+      - key: SPRING_DATASOURCE_URL
+        sync: false
+      - key: SPRING_DATASOURCE_USERNAME
+        sync: false
+      - key: SPRING_DATASOURCE_PASSWORD
+        sync: false
+      - key: GROQ_API_KEY
+        sync: false
+      - key: CORS_ALLOWED_ORIGINS
+        value: http://localhost:5173,https://prepedge-web-v3.onrender.com
+
+  # --- PrepEdge Elite Web (Frontend Static) ---
+  - type: web
+    name: prepedge-web-v3
+    runtime: static
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: VITE_API_BASE_URL
+        fromService:
+          type: web
+          name: prepedge-api-v3
+          property: host
